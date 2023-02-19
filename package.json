@@ -1,0 +1,39 @@
+{
+  "name": "@wuapi/processor",
+  "version": "1.0.0",
+  "description": "Processor of typscript to form WU-API entities",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WuYuntaoTheGreat/wuapi-processor.git"
+  },
+  "keywords": [
+    "WU",
+    "API",
+    "Processor"
+  ],
+  "author": "Wu Yuntao <wuyuntao@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/WuYuntaoTheGreat/wuapi-processor/issues"
+  },
+  "homepage": "https://github.com/WuYuntaoTheGreat/wuapi-processor#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^18.14.0",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.191",
+    "@wuapi/essential": "^1.0.1",
+    "@wuapi/generator": "^1.0.0",
+    "dedent-js": "^1.0.1",
+    "lodash": "^4.17.21"
+  }
+}
