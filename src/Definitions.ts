@@ -2,7 +2,7 @@ import { iEnum, iEnumItem, iCommentable, iField, iEntity } from './Interfaces';
 import dedent from 'dedent-js';
 
 import {
-  $Commentable, $EntityDirection,
+  $Commentable,
   $EntityType, $EnumItem,
   $Field,
   $ReqMethod
@@ -182,7 +182,6 @@ export class Entity extends Commentable<iEntity> implements iEntity {
   response  : Entity | {[key: string]: Entity} | null = null
   path      : string | null = null
   parent    : Entity | null = null
-  direction : $EntityDirection | null = null
   method    : $ReqMethod | null = null
 
   know(name: string, field: iField): iEntity {
@@ -199,20 +198,6 @@ export class Entity extends Commentable<iEntity> implements iEntity {
   
   setMethod(m: $ReqMethod | null | undefined): iEntity {
     this.method = m ?? null
-    return this
-  }
-
-  /**
-   * Specify the direction of this entity to virgo to taurus.
-   * @returns this entity
-   */
-  v2t(): iEntity {
-    this.direction = $EntityDirection.V2T
-    return this
-  }
-
-  t2v(): iEntity {
-    this.direction = $EntityDirection.T2V
     return this
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "@wuapi/processor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Processor of typscript to form WU-API entities",
   "main": "lib/index.js",
   "scripts": {
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@types/lodash": "^4.14.191",
-    "@wuapi/essential": "^1.0.1",
+    "@wuapi/essential": "^1.0.2",
     "@wuapi/generator": "^1.0.0",
     "dedent-js": "^1.0.1",
     "lodash": "^4.17.21"

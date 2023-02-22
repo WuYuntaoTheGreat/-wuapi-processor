@@ -1,5 +1,5 @@
 import { iEnum, iEnumItem, iCommentable, iField, iEntity } from './Interfaces';
-import { $Commentable, $EntityDirection, $EntityType, $ReqMethod } from '@wuapi/essential';
+import { $Commentable, $EntityType, $ReqMethod } from '@wuapi/essential';
 /**
  * Wrapper of Essentual $Commentable.
  * Adding cmt() function.
@@ -125,19 +125,12 @@ export declare class Entity extends Commentable<iEntity> implements iEntity {
     } | null;
     path: string | null;
     parent: Entity | null;
-    direction: $EntityDirection | null;
     method: $ReqMethod | null;
     know(name: string, field: iField): iEntity;
     setFields(config: {
         [key: string]: iField;
     }): iEntity;
     setMethod(m: $ReqMethod | null | undefined): iEntity;
-    /**
-     * Specify the direction of this entity to virgo to taurus.
-     * @returns this entity
-     */
-    v2t(): iEntity;
-    t2v(): iEntity;
     abs(): iEntity;
     req(res: iEntity | {
         [key: string]: iEntity;

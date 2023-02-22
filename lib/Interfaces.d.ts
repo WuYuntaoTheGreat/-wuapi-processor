@@ -80,16 +80,6 @@ export interface iEntity extends iCommentable<iEntity> {
      */
     setMethod(m: $ReqMethod | null | undefined): iEntity;
     /**
-     * Specify the direction of this entity to virgo to taurus.
-     * @returns this entity
-     */
-    v2t(): iEntity;
-    /**
-     * Specify the direction of this entity to taurus to virgo.
-     * @returns this entity
-     */
-    t2v(): iEntity;
-    /**
      * Mark this entity as abstract.
      * @returns this entity
      */
