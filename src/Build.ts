@@ -1,5 +1,3 @@
-// vim: set ts=2 sw=2:
-
 import {
   Entity,
   Enum,
@@ -84,7 +82,7 @@ function buildModule(
 }
 
 /**
- * 预处理
+ * Preprocessor.
  * Recursively go through the entity, find all sub entities or enumerations, and add them to
  * the module object.
  * @param entity The entity object to check.

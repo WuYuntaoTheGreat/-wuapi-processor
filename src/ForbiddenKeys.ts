@@ -1,5 +1,3 @@
-// vim: set ts=2 sw=2:
-
 let ForbiddenKeys = [ 
     // Java
     "VOID",

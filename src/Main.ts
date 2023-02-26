@@ -1,7 +1,7 @@
 // vim: set ts=2 sw=2:
 
 import { Project } from "./Definitions"
-import { buildProject, verifyProject } from "./DefProcessor"
+import { buildProject, verifyProject } from "./Build"
 import dedent from "dedent-js"
 import { BasePlugin, JavaPlugin, RepositoryPlugin, SwiftPlugin } from "@wuapi/generator"
 import path from "path"
