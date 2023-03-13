@@ -7,6 +7,7 @@ import { BasePlugin, JavaPlugin, RepositoryPlugin, SwiftPlugin } from "@wuapi/ge
 import path from "path"
 import _ from "lodash"
 import { error, info, succeed, warning } from "./Log"
+import {WebPlugin} from "./Web"
 
 /**
  * Main class of 
@@ -18,13 +19,14 @@ export class WuApi {
 
   /**
    * Constructor.
-   * 
+   *
    * Add default generators.
    */
   constructor(){
     this.use(new RepositoryPlugin())
     this.use(new JavaPlugin())
     this.use(new SwiftPlugin())
+    this.use(new WebPlugin())
   }
 
   /**
