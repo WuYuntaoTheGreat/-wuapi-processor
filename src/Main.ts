@@ -3,10 +3,10 @@
 import { Project } from "./Definitions"
 import { buildProject, verifyProject } from "./Build"
 import dedent from "dedent-js"
-import { BasePlugin, JavaPlugin, RepositoryPlugin, SwiftPlugin } from "@wuapi/generator"
+import { BasePlugin, RepositoryPlugin, } from "@wuapi/generator"
 import path from "path"
 import _ from "lodash"
-import { error, info, succeed, warning } from "./Log"
+import { error, info, succeed, } from "./Log"
 import {WebPlugin} from "./Web"
 
 /**
@@ -24,8 +24,6 @@ export class WuApi {
    */
   constructor(){
     this.use(new RepositoryPlugin())
-    this.use(new JavaPlugin())
-    this.use(new SwiftPlugin())
     this.use(new WebPlugin())
   }
 
@@ -91,6 +89,11 @@ export class WuApi {
     for(let g of this.generators.values()){
       const desc = g.getDescription()
       console.log(`  -${desc.abbreviation}        : ${desc.description} `)
+      if(desc.arguments.length > 0){
+        for(let a of desc.arguments){
+          console.log(`    --${desc.abbreviation}-${a.tag} ${a.withValue ? "value" : ""}: ${a.description}`)
+        }
+      }
     }
   }
 
@@ -106,6 +109,10 @@ export class WuApi {
     console.error("\n")
 
     let outDir = path.join(process.cwd(), 'out')
+    let gens: {[key: string]: {
+      generator: BasePlugin,
+      args: {[key: string]: string},
+    }} = {}
 
     var i: number = 2
     while (i < args.length){
@@ -118,7 +125,7 @@ export class WuApi {
         case '-h':
           this.usage()
           return
-        
+
         case '-D':
           console.log(JSON.stringify(prj, undefined, 2))
           return
@@ -133,9 +140,25 @@ export class WuApi {
           return
 
         default: {
-          const generator = this.generators.get(args[i].match(/^-(.+)/)?.[1] ?? "")
-          if(generator){
-            generator.process(prj, outDir)
+          const m1 = args[i].match(/^-([a-zA-Z])$/)
+          const m2 = args[i].match(/^--([a-zA-Z])-([a-zA-Z0-9]+)$/)
+          if(m1){
+            const key = m1[1]
+            const generator = this.generators.get(key)
+            if(generator){
+              gens[key] = {
+                generator: generator!,
+                args: {},
+              }
+            }
+          } else if(m2){
+            const key = m2[1]
+            const arg = m2[2]
+            const argConf = _.find(gens[key].generator.getDescription().arguments, (a) => a.tag == arg)
+            if(argConf){
+              let value = argConf.withValue ? args[++i] : ""
+              gens[key].args[arg] = value
+            }
           } else {
             error(`Unknown option "${args[i]}"`)
             this.usage()
@@ -144,6 +167,12 @@ export class WuApi {
         }
       }
       i++
+    }
+
+    // Do execute plugin.
+    for(let key in gens){
+      let gen = gens[key]
+      gen.generator.process(prj, outDir, gen.args)
     }
   }
 

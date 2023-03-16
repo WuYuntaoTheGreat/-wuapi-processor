@@ -11,7 +11,8 @@ export class WebPlugin extends BasePlugin {
       name: "web",
       abbreviation: "w",
       version: "1.0.0",
-      description: "Generate a Json repository with web support."
+      description: "Generate a Json repository with web support.",
+      arguments: [],
     }
   }
 
@@ -24,7 +25,7 @@ export class WebPlugin extends BasePlugin {
       if(error) {
         return console.error(error)
       } else {
-        (new RepositoryPlugin()).process(project, dstDir)
+        (new RepositoryPlugin()).process(project, dstDir, {})
       }
     })
 
