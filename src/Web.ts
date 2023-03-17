@@ -17,7 +17,7 @@ export class WebPlugin extends BasePlugin {
   }
 
   process(project: $Project, outputDir: string): void {
-    let srcDir = [__dirname, "..", "node_modules", "@wuapi", "web", "dist"].join(path.sep)
+    let srcDir = [process.cwd(), "node_modules", "@wuapi", "web", "dist"].join(path.sep)
     let dstDir = [outputDir, this.getDescription().name].join(path.sep)
 
 
