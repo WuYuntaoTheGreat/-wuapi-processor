@@ -89,10 +89,12 @@ export class WuApi {
     for(let g of this.generators.values()){
       const desc = g.getDescription()
       console.log(`  -${desc.abbreviation}        : ${desc.description} `)
-      if(desc.arguments.length > 0){
-        for(let a of desc.arguments){
-          console.log(`    --${desc.abbreviation}-${a.tag} ${a.withValue ? "value" : ""}: ${a.description}`)
-        }
+      let tags = _.map(desc.arguments, (a) => `    --${desc.abbreviation}-${a.tag} ${a.withValue ? "<value>" : ""}`)
+      let max = _.max(_.map(tags, (a) => a.length)) ?? 0
+
+      for (let i = 0; i < desc.arguments.length; i++){
+        const padding = " ".repeat(max - tags[i].length)
+        console.log(`${tags[i]}${padding} : ${desc.arguments[i].description}`)
       }
     }
   }
