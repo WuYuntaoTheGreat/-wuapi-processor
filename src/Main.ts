@@ -74,6 +74,7 @@ export class WuApi {
 
   usage(){
     console.log(dedent`
+
       Usage:
       node script [options] <action>
 
@@ -144,6 +145,7 @@ export class WuApi {
         default: {
           const m1 = args[i].match(/^-([a-zA-Z])$/)
           const m2 = args[i].match(/^--([a-zA-Z])-([a-zA-Z0-9]+)$/)
+
           if(m1){
             const key = m1[1]
             const generator = this.generators.get(key)
@@ -152,6 +154,10 @@ export class WuApi {
                 generator: generator!,
                 args: {},
               }
+            } else {
+              error(`Unknown plugin "${args[i]}"`)
+              this.usage()
+              return
             }
           } else if(m2){
             const key = m2[1]
@@ -160,6 +166,10 @@ export class WuApi {
             if(argConf){
               let value = argConf.withValue ? args[++i] : ""
               gens[key].args[arg] = value
+            } else {
+              error(`Unknown plugin argument "${args[i]}"`)
+              this.usage()
+              return
             }
           } else {
             error(`Unknown option "${args[i]}"`)
