@@ -1,4 +1,6 @@
 import {
+  GlobalEntity,
+  GlobalEnum,
   Entity,
   Enum,
   EnumField,
@@ -93,15 +95,15 @@ function _traverseEntityTree(entity: Entity, module: Module){
     // check enum fields
     if(field instanceof EnumField){
       if(field.enu.name){
-        module.enums.set(field.enu.name, field.enu.enum)
+        module.enums.set(field.enu.name, field.enu.element)
       }
     }
 
     // check object fields
     if(field instanceof ObjectField){
       if(field.entity.name){
-        module.entities.set(field.entity.name, field.entity.entity)
-        _traverseEntityTree(field.entity.entity, module)
+        module.entities.set(field.entity.name, field.entity.element)
+        _traverseEntityTree(field.entity.element, module)
       }
     }
 
@@ -113,7 +115,7 @@ function _traverseEntityTree(entity: Entity, module: Module){
 
   if(entity.response != null && entity.response.name){
     const key = entity.response.name
-    const ent = entity.response.entity
+    const ent = entity.response.element
     if(!ent.comment){
       ent.comment = entity.comment
     }
@@ -160,12 +162,24 @@ function buildEnum(
  */
 function _findModuleAndName(
   module: Module, 
-  element: Entity | Enum | {[key: string]: Entity} | {[key: string]: Enum}
+  element: GlobalEnum | GlobalEntity
 ): $ElementPath {
-  if (!(element instanceof Entity) && !(element instanceof Enum)){
-    const key = Object.keys(element)[0]
-    return new $ElementPath(module.name, key)
+  if(element.name){
+    return new $ElementPath(module.name, element.name)
+  } else {
+    return _findModuleAndElementName(module, element.element)
   }
+}
+
+/**
+ * Find an entity from a project, and return the module name and entity name.
+ * @param module The {@link Module} object, from where to find.
+ * @param element The element object to find.
+ * @returns 
+ */
+function _findModuleAndElementName(
+  module: Module, 
+  element: Entity | Enum): $ElementPath {
 
   for(const m of module.project.modules.values()){
     const list: Map<string, Entity> | Map<string, Enum> = element instanceof Entity
@@ -200,15 +214,14 @@ function buildEntity(
   ent.method      = self.method
 
   if(self.parent){
-    ent.parent = _findModuleAndName(module, self.parent)
+    ent.parent = _findModuleAndElementName(module, self.parent)
   }
 
   if(self.response){
-    if(self.response instanceof Entity){
+    if(self.response?.name){
+      ent.response = new $ElementPath(module.name, self.response!.name)
+    } else if(self.response?.element){
       ent.response = _findModuleAndName(module, self.response)
-    } else {
-      const key = Object.keys(self.response)[0]
-      ent.response = new $ElementPath(module.name, key)
     }
   }
 
@@ -247,13 +260,13 @@ function buildField(
     case 'SSMapField'     : type = new $TSSMap     (); break  
 
     case 'EnumField': {
-      const result = _findModuleAndName(module, (self as EnumField).enu.enum)
+      const result = _findModuleAndName(module, (self as EnumField).enu)
       type = new $TEnum(result)
       break
     }
 
     case 'ObjectField': {
-      const result = _findModuleAndName(module, (self as ObjectField).entity.entity)
+      const result = _findModuleAndName(module, (self as ObjectField).entity)
       type = new $TObject(result)
       break
     }

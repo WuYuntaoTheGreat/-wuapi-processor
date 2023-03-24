@@ -7,8 +7,8 @@ import {
   $ReqMethod
 } from '@wuapi/essential';
 
-export type GlobalEnum   = { name: string | null, enum:   Enum }
-export type GlobalEntity = { name: string | null, entity: Entity }
+export type GlobalEnum   = { name: string | null, element: Enum }
+export type GlobalEntity = { name: string | null, element: Entity }
 
 //function translateEntityOrMap(res: iEntity | {[key: string]: iEntity}): Entity | {[key: string]: Entity} {
 //  if(res instanceof Entity){
@@ -172,15 +172,15 @@ export function  unknown(name: string ): UnknownField { return new UnknownField 
 
 export function obj(elementOrName: iEntity | string, _element?: iEntity): ObjectField {
   return new ObjectField((typeof elementOrName === 'string')
-      ? { name: elementOrName as string, entity: _element as Entity }
-      : { name: null, entity: elementOrName as Entity }
+      ? { name: elementOrName as string, element: _element as Entity }
+      : { name: null, element: elementOrName as Entity }
   )
 }
 
 export function enu(elementOrName: iEnum | string, _element?: iEnum): EnumField {
   return new EnumField((typeof elementOrName === 'string')
-      ? { name: elementOrName as string, enum: _element as Enum }
-      : { name: null, enum: elementOrName as Enum }
+      ? { name: elementOrName as string, element: _element as Enum }
+      : { name: null, element: elementOrName as Enum }
   )
 }
 
@@ -223,8 +223,8 @@ export class Entity extends Commentable<iEntity> implements iEntity {
   req(resOrName: iEntity | string, _res?: iEntity): iEntity {
     this.type = $EntityType.REQUEST
     this.response = (typeof resOrName === 'string')
-      ? { name: resOrName as string, entity: _res as Entity }
-      : { name: null, entity: resOrName as Entity }
+      ? { name: resOrName as string, element: _res as Entity }
+      : { name: null, element: resOrName as Entity }
     return this
   }
 
