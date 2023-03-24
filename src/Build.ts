@@ -66,7 +66,7 @@ function buildModule(
 ): $Module {
   const mdl = new $Module()
 
-  self.entities.forEach((entity, key) => {
+  self.entities.forEach((entity, _) => {
     _traverseEntityTree(entity, self)
   })
 
@@ -92,19 +92,16 @@ function _traverseEntityTree(entity: Entity, module: Module){
   function checkField(field: Field){
     // check enum fields
     if(field instanceof EnumField){
-      if(!(field.enu instanceof Enum)){
-        const key = Object.keys(field.enu)[0]
-        module.enums.set(key, field.enu[key])
+      if(field.enu.name){
+        module.enums.set(field.enu.name, field.enu.enum)
       }
     }
 
     // check object fields
     if(field instanceof ObjectField){
-      if(!(field.entity instanceof Entity)){
-        const key = Object.keys(field.entity)[0]
-        const ent = field.entity[key]
-        module.entities.set(key, ent)
-        _traverseEntityTree(ent, module)
+      if(field.entity.name){
+        module.entities.set(field.entity.name, field.entity.entity)
+        _traverseEntityTree(field.entity.entity, module)
       }
     }
 
@@ -114,9 +111,9 @@ function _traverseEntityTree(entity: Entity, module: Module){
     }
   }
 
-  if(entity.response != null && !(entity.response instanceof Entity)){
-    const key = Object.keys(entity.response)[0]
-    const ent = entity.response[key]
+  if(entity.response != null && entity.response.name){
+    const key = entity.response.name
+    const ent = entity.response.entity
     if(!ent.comment){
       ent.comment = entity.comment
     }
@@ -250,13 +247,13 @@ function buildField(
     case 'SSMapField'     : type = new $TSSMap     (); break  
 
     case 'EnumField': {
-      const result = _findModuleAndName(module, (self as EnumField).enu)
+      const result = _findModuleAndName(module, (self as EnumField).enu.enum)
       type = new $TEnum(result)
       break
     }
 
     case 'ObjectField': {
-      const result = _findModuleAndName(module, (self as ObjectField).entity)
+      const result = _findModuleAndName(module, (self as ObjectField).entity.entity)
       type = new $TObject(result)
       break
     }
@@ -353,7 +350,7 @@ export function verifyProject(project: $Project): boolean {
     })
 
     // Check fields
-    _.forIn(entity.fieldsLocal, (entity, name) => {
+    _.forIn(entity.fieldsLocal, (_, name) => {
       validName(name, `${pp(path)}: Field "${name}" `)
       keyword(  name, `${pp(path)}: Field "${name}" `)
 
@@ -367,9 +364,9 @@ export function verifyProject(project: $Project): boolean {
   // Check enum items
   project.flatEnums().forEach(({path, enu}) => {
     // Check items
-    enu.flat().forEach(({name, item}) => {
-      validName(name, `${pp(path)}: Item "${name}"`)
-      keyword(  name, `${pp(path)}: Item "${name}"`)
+    enu.flat().forEach((e) => {
+      validName(e.name, `${pp(path)}: Item "${e.name}"`)
+      keyword(  e.name, `${pp(path)}: Item "${e.name}"`)
     })
   })
 

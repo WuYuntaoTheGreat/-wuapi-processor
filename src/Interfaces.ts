@@ -1,5 +1,8 @@
 import { $ReqMethod } from "@wuapi/essential"
 
+export type iGlobalEnum   = { name: string | null, enum:   iEnum }
+export type iGlobalEntity = { name: string | null, entity: iEntity }
+
 export interface iCommentable<T> {
   /**
    * Set the comment of this field.
@@ -96,10 +99,11 @@ export interface iEntity extends iCommentable<iEntity> {
 
   /**
    * Mark this entity as request entity, and set corresponding response.
-   * @param res The response entity, if this entity is request
+   * @param resOrName The response entity or its name
+   * @param _res If the [resOrName] is the name, this is the response entity
    * @returns this entity
    */
-  req(res: iEntity | {[key: string]: iEntity}): iEntity 
+  req(resOrName: iEntity | string, _res?: iEntity): iEntity 
 
   /**
    * Mark this entity as response entity.

@@ -7,27 +7,30 @@ import {
   $ReqMethod
 } from '@wuapi/essential';
 
-function translateEntityOrMap(res: iEntity | {[key: string]: iEntity}): Entity | {[key: string]: Entity} {
-  if(res instanceof Entity){
-    return res as Entity
-  } else {
-    const key = Object.keys(res)[0]
-    let result: any = {}
-    result[key] = (res as any)[key] as Entity
-    return result
-  }
-}
+export type GlobalEnum   = { name: string | null, enum:   Enum }
+export type GlobalEntity = { name: string | null, entity: Entity }
 
-function translateEnumOrMap(res: iEnum | {[key: string]: iEnum}): Enum | {[key: string]: Enum} {
-  if(res instanceof Enum){
-    return res as Enum
-  } else {
-    const key = Object.keys(res)[0]
-    let result: any = {}
-    result[key] = (res as any)[key] as Enum
-    return result
-  }
-}
+//function translateEntityOrMap(res: iEntity | {[key: string]: iEntity}): Entity | {[key: string]: Entity} {
+//  if(res instanceof Entity){
+//    return res as Entity
+//  } else {
+//    const key = Object.keys(res)[0]
+//    let result: any = {}
+//    result[key] = (res as any)[key] as Entity
+//    return result
+//  }
+//}
+//
+//function translateEnumOrMap(res: iEnum | {[key: string]: iEnum}): Enum | {[key: string]: Enum} {
+//  if(res instanceof Enum){
+//    return res as Enum
+//  } else {
+//    const key = Object.keys(res)[0]
+//    let result: any = {}
+//    result[key] = (res as any)[key] as Enum
+//    return result
+//  }
+//}
 
 /**
  * Wrapper of Essentual $Commentable.
@@ -143,13 +146,13 @@ export class ListField     extends Field { constructor(public member: Field ){ s
 export class UnknownField  extends Field { constructor(public name:   string){ super() } }
 
 export class EnumField extends Field {
-  constructor(public enu: Enum | {[key: string]: Enum}){
+  constructor(public enu: GlobalEnum){
     super()
   }
 }
 
 export class ObjectField extends Field {
-  constructor(public entity: Entity | {[key: string]: Entity}){
+  constructor(public entity: GlobalEntity){
     super()
   }
 }
@@ -167,12 +170,18 @@ export function  s2s(): SSMapField   { return new SSMapField    () }
 export function  lst(member: Field    ): ListField    { return new ListField    (member) }
 export function  unknown(name: string ): UnknownField { return new UnknownField (name  ) }
 
-export function obj(element: iEntity | {[key: string]: iEntity}): ObjectField {
-  return new ObjectField(translateEntityOrMap(element))
+export function obj(elementOrName: iEntity | string, _element?: iEntity): ObjectField {
+  return new ObjectField((typeof elementOrName === 'string')
+      ? { name: elementOrName as string, entity: _element as Entity }
+      : { name: null, entity: elementOrName as Entity }
+  )
 }
 
-export function enu(element: iEnum | {[key: string]: iEnum}): EnumField {
-  return new EnumField(translateEnumOrMap(element))
+export function enu(elementOrName: iEnum | string, _element?: iEnum): EnumField {
+  return new EnumField((typeof elementOrName === 'string')
+      ? { name: elementOrName as string, enum: _element as Enum }
+      : { name: null, enum: elementOrName as Enum }
+  )
 }
 
 
@@ -184,7 +193,7 @@ export class Entity extends Commentable<iEntity> implements iEntity {
   fields    = new Map<string, Field>()
   knownMap  = new Map<string, Field>()
   type      = $EntityType.OBJECT
-  response  : Entity | {[key: string]: Entity} | null = null
+  response  : GlobalEntity | null = null
   path      : string | null = null
   parent    : Entity | null = null
   method    : $ReqMethod | null = null
@@ -211,9 +220,11 @@ export class Entity extends Commentable<iEntity> implements iEntity {
     return this
   }
 
-  req(res: iEntity | {[key: string]: iEntity}): iEntity {
+  req(resOrName: iEntity | string, _res?: iEntity): iEntity {
     this.type = $EntityType.REQUEST
-    this.response = translateEntityOrMap(res)
+    this.response = (typeof resOrName === 'string')
+      ? { name: resOrName as string, entity: _res as Entity }
+      : { name: null, entity: resOrName as Entity }
     return this
   }
 
