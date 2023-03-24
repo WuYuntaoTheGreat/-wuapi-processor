@@ -284,6 +284,7 @@ function buildField(
   fld.isOptional      = self.optional
   fld.isPathParameter = self.isPathParameter
   fld.realname        = self.realname
+  fld.demoConfig      = self.demoConfig
 
   return fld 
 }
@@ -301,7 +302,6 @@ export function verifyProject(project: $Project): boolean {
   function pp(pth: $ElementPath): string {
     return `${pth.module}/${pth.name}`
   }
-
 
   // check standard C variable format
   function validName(name: string | null | undefined, location: string) {

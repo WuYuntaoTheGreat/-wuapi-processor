@@ -3,8 +3,7 @@ import dedent from 'dedent-js';
 
 import {
   $Commentable,
-  $EntityType, $EnumItem,
-  $Field,
+  $EntityType,
   $ReqMethod
 } from '@wuapi/essential';
 
@@ -102,6 +101,7 @@ export class Field extends Commentable<iField> implements iField {
   optional: boolean = false
   isPathParameter: boolean = false
   fixed: any | null = null
+  demoConfig: {[key: string]: string} | null = null
 
   opt(): iField {
     this.optional = true
@@ -120,6 +120,11 @@ export class Field extends Commentable<iField> implements iField {
 
   fix(v: any | null): iField{
     this.fixed = v
+    return this
+  }
+
+  dmo(v: {[key: string]: string}): iField{
+    this.demoConfig = v
     return this
   }
 }
