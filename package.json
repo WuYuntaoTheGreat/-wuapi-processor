@@ -1,6 +1,6 @@
 {
   "name": "@wuapi/processor",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "description": "Processor of typscript to form WU-API entities",
   "main": "lib/index.js",
   "scripts": {
