@@ -19,6 +19,13 @@ export interface iEnumItem extends iCommentable<iEnumItem> {
    * @returns this this item
    */
   ren(realname: string): iEnumItem
+
+  /**
+   * Set the configurations of this enum item.
+   * @param v The configurations to set
+   * @returns this field
+   */
+  cnf(v: {[key: string]: string}): iEnumItem
 }
 
 /**
@@ -31,6 +38,13 @@ export interface iEnum extends iCommentable<iEnum> {
    * @return this enumeration
    */
   setItems(config: {[key: string]: iEnumItem}): iEnum 
+
+  /**
+   * Set the configurations of this enumeration.
+   * @param v The configurations to set
+   * @returns this field
+   */
+  cnf(v: {[key: string]: string}): iEnum
 }
 
 /**
@@ -131,4 +145,12 @@ export interface iEntity extends iCommentable<iEntity> {
    * @returns this entity
    */
   extends(entity: iEntity): iEntity 
+
+  /**
+   * Set the configurations of this entity.
+   * @param v The configurations to set
+   * @returns this field
+   */
+  cnf(v: {[key: string]: string}): iEntity
 }
+

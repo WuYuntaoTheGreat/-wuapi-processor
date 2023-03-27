@@ -10,28 +10,6 @@ import {
 export type GlobalEnum   = { name: string | null, element: Enum }
 export type GlobalEntity = { name: string | null, element: Entity }
 
-//function translateEntityOrMap(res: iEntity | {[key: string]: iEntity}): Entity | {[key: string]: Entity} {
-//  if(res instanceof Entity){
-//    return res as Entity
-//  } else {
-//    const key = Object.keys(res)[0]
-//    let result: any = {}
-//    result[key] = (res as any)[key] as Entity
-//    return result
-//  }
-//}
-//
-//function translateEnumOrMap(res: iEnum | {[key: string]: iEnum}): Enum | {[key: string]: Enum} {
-//  if(res instanceof Enum){
-//    return res as Enum
-//  } else {
-//    const key = Object.keys(res)[0]
-//    let result: any = {}
-//    result[key] = (res as any)[key] as Enum
-//    return result
-//  }
-//}
-
 /**
  * Wrapper of Essentual $Commentable.
  * Adding cmt() function.
@@ -62,6 +40,11 @@ export class EnumItem extends Commentable<iEnumItem> implements iEnumItem {
     this.realname = realname
     return this
   }
+
+  cnf(v: {[key: string]: string}): iEnumItem {
+    this.config = v
+    return this
+  }
 }
 
 /**
@@ -74,6 +57,11 @@ export class Enum extends Commentable<iEnum> implements iEnum {
     for(let key in config){
       this.items.set(key, config[key])
     }
+    return this
+  }
+
+  cnf(v: {[key: string]: string}): iEnum {
+    this.config = v
     return this
   }
 }
@@ -247,6 +235,11 @@ export class Entity extends Commentable<iEntity> implements iEntity {
     if(!this.comment){
       this.comment = entity.comment
     }
+    return this
+  }
+
+  cnf(v: {[key: string]: string}): iEntity {
+    this.config = v
     return this
   }
 }
