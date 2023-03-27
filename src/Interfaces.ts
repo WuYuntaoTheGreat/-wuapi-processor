@@ -65,11 +65,11 @@ export interface iField extends iCommentable<iField> {
   fix(v: any | null): iField
 
   /**
-   * Set the demo configs of this field.
+   * Set the configurations of this field.
    * @param v The configurations to set
-   * @returns  this field
+   * @returns this field
    */
-  dmo(v: {[key: string]: string}): iField
+  cnf(v: {[key: string]: string}): iField
 }
 
 /**

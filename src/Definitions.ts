@@ -104,7 +104,7 @@ export class Field extends Commentable<iField> implements iField {
   optional: boolean = false
   isPathParameter: boolean = false
   fixed: any | null = null
-  demoConfig: {[key: string]: string} | null = null
+  config: {[key: string]: string} | null = null
 
   opt(): iField {
     this.optional = true
@@ -126,8 +126,8 @@ export class Field extends Commentable<iField> implements iField {
     return this
   }
 
-  dmo(v: {[key: string]: string}): iField{
-    this.demoConfig = v
+  cnf(v: {[key: string]: string}): iField{
+    this.config = v
     return this
   }
 }

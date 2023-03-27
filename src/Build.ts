@@ -294,7 +294,7 @@ function buildField(
   fld.isOptional      = self.optional
   fld.isPathParameter = self.isPathParameter
   fld.realname        = self.realname
-  fld.demoConfig      = self.demoConfig
+  fld.config          = self.config
 
   return fld 
 }
